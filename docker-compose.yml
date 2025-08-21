@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  monitor-service:
+    build: ./monitor-service
+    ports:
+      - "5001:5000"
+
+#  anomaly-service:
+#    build: ./anomaly-service
+#    ports:
+#      - "5002:5000"
+
+#  optimizer-service:
+#    build: ./optimizer-service
+#    ports:
+#      - "5003:5000"
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules.yml:/etc/prometheus/rules.yml
+
+    ports:
+      - "9090:9090"
+
+  alertmanager:
+    image: prom/alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./prometheus/alertmanager.yml:/etc/alertmanager/config.yml
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus

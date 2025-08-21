@@ -1,0 +1,113 @@
+{
+  "id": null,
+  "uid": "mn-dashboard",
+  "title": "MN Service Assurance Dashboard",
+  "tags": ["network", "docker", "prometheus"],
+  "timezone": "browser",
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "schemaVersion": 36,
+  "version": 1,
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Latency (ms)",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "red" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "value": null, "color": "green" },
+              { "value": 150, "color": "yellow" },
+              { "value": 200, "color": "red" }
+            ]
+          },
+          "custom": {
+            "drawPoints": "always",
+            "pointsRadius": 8,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "graphStyle": "lines+points",
+            "fillOpacity": 5
+          }
+        }
+      },
+      "targets": [
+        { "expr": "latency_ms", "legendFormat": "Latency" }
+      ],
+      "datasource": { "type": "prometheus", "uid": "Prometheus" }
+    },
+    {
+      "type": "gauge",
+      "title": "Packet Loss (%)",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "value": null, "color": "green" },
+              { "value": 70, "color": "yellow" },
+              { "value": 80, "color": "red" }
+            ]
+          }
+        }
+      },
+      "targets": [
+        { "expr": "packet_loss_percent", "legendFormat": "Packet Loss" }
+      ],
+      "datasource": { "type": "prometheus", "uid": "Prometheus" }
+    },
+    {
+      "type": "timeseries",
+      "title": "Throughput (Mbps)",
+      "gridPos": { "x": 0, "y": 16, "w": 12, "h": 8 },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "green" },
+          "custom": {
+            "drawPoints": "always",
+            "pointsRadius": 8,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "graphStyle": "lines+points",
+            "fillOpacity": 5
+          }
+        }
+      },
+      "targets": [
+        { "expr": "throughput_mbps", "legendFormat": "Throughput" }
+      ],
+      "datasource": { "type": "prometheus", "uid": "Prometheus" }
+    },
+    {
+      "type": "timeseries",
+      "title": "Packet Loss (Time Series)",
+      "gridPos": { "x": 0, "y": 24, "w": 12, "h": 8 },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "orange" },
+          "custom": {
+            "drawPoints": "always",
+            "pointsRadius": 8,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "graphStyle": "lines+points",
+            "fillOpacity": 5
+          }
+        }
+      },
+      "targets": [
+        { "expr": "packet_loss_percent", "legendFormat": "Packet Loss" }
+      ],
+      "datasource": { "type": "prometheus", "uid": "Prometheus" }
+    }
+  ]
+}

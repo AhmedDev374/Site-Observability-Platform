@@ -1,0 +1,16 @@
+Normal metrics:
+
+http://localhost:5001/metrics
+ → shows normal KPIs
+
+Simulate high latency:
+
+Turn ON: http://localhost:5001/test/latency/on
+
+Turn OFF: http://localhost:5001/test/latency/off
+
+Simulate high packet loss:
+
+Turn ON: http://localhost:5001/test/packetloss/on
+
+Turn OFF: http://localhost:5001/test/packetloss/off

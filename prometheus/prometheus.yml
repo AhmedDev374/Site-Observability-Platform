@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: "monitor-service"
+    static_configs:
+      - targets: ["monitor-service:5000"]
+
+rule_files:
+  - "/etc/prometheus/rules.yml"
+
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - 'alertmanager:9093'  # matches your docker-compose service name
