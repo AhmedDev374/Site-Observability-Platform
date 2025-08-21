@@ -8,7 +8,7 @@
 ![grafana_data_source.PNG](images/grafana_data_source.PNG)  
 
 4. **Graphana DashBoard:** 
-![grafanaa_packer_loss(high).PNG](images/grafanaa_packer_loss(high).PNG)
+![grafanaa_packer_loss(high).PNG](Images/grafanaa_packer_loss(high).PNG)
 
 
 ---
