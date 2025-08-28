@@ -1,35 +1,34 @@
-1. **Prometheus Targets:** 
-![grafanaa_packer_loss(high).PNG](Images/grafanaa_packer_loss(high).PNG)
+1. **Prometheus Targets:**  
+![prometheus_targets](Images/grafanaa_packer_loss(high).PNG)
 
-2. **Promethus Alert:** 
-![prometheus_alert.PNG](Images/prometheus_alert.PNG)
+2. **Prometheus Alert:**  
+![prometheus_alert](Images/prometheus_alert.PNG)
 
-3. **Graphana DataSource:** 
-![grafana_data_source.PNG](images/grafana_data_source.PNG)  
+3. **Grafana DataSource:**  
+![grafana_datasource](images/grafana_data_source.PNG)  
 
-4. **Graphana DashBoard:** 
-![grafanaa_packer_loss(high).PNG](Images/grafanaa_packer_loss(high).PNG)
-
-
----
-
-# PrometheusPacketSentinel
-
-> A comprehensive network monitoring solution leveraging Prometheus, Grafana, and custom exporters to provide real-time visibility into packet loss, network latency, and system performance metrics.
+4. **Grafana Dashboard:**  
+![grafana_dashboard](Images/grafanaa_packer_loss(high).PNG)
 
 ---
 
-##  Table of Contents
+# Site-Observability-Platform
+
+> A complete observability solution built with **Prometheus** and **Grafana**, designed to monitor site services, system health, and performance metrics in real-time.
+
+---
+
+## Table of Contents
 
 - [Overview](#overview)  
-- [Architecture](#architecture)
-- [Features](#features)   
+- [Architecture](#architecture)  
+- [Features](#features)  
 - [Prerequisites](#prerequisites)  
 - [Installation & Setup](#installation--setup)  
 - [Usage](#usage)  
 - [Configuration & Environment Variables](#configuration--environment-variables)  
-- [Project Structure](#project-structure)
-- [Troubleshooting](#Troubleshooting)  
+- [Project Structure](#project-structure)  
+- [Troubleshooting](#troubleshooting)  
 - [Contact](#contact)  
 - [License](#license)
 
@@ -37,12 +36,14 @@
 
 ## Overview
 
-PrometheusFlow is a self-contained monitoring solution for container environments. It includes:
+**Site-Observability-Platform** provides visibility into infrastructure and site services by combining:
 
-1. **Prometheus** – Time-series database for collecting and storing metrics
-2. **Grafana** – Visualization platform for creating insightful dashboards
-3. **Alertmanager** – Handles alerts and notifications
-4. **Custom Exporters** – Specialized collectors for network metrics
+1. **Prometheus** – Collects and stores metrics in a time-series database  
+2. **Grafana** – Dashboards and visualization layer  
+3. **Alertmanager** – Handles alerts and notifications  
+4. **Custom Exporters** – Expose site-specific service metrics  
+
+This platform helps track site uptime, performance, and service reliability with ready-to-use dashboards and alerts.
 
 ---
 
@@ -51,20 +52,13 @@ PrometheusFlow is a self-contained monitoring solution for container environment
 ```plaintext
 ┌─────────────────┐     ┌─────────────┐     ┌─────────────────┐
 │                 │     │             │     │                 │
-│   Grafana UI    ◄─────┤ Prometheus  ├─────► Alertmanager   │
+│   Grafana UI    ◄─────┤ Prometheus  ├─────► Alertmanager    │
 │                 │     │             │     │                 │
 └─────────────────┘     └──────┬──────┘     └─────────────────┘
                                │
                      ┌─────────▼─────────┐
                      │                   │
-                     │   Monitor Service │
-                     │                   │
-                     └─────────┬─────────┘
-                               │
-                     ┌─────────▼─────────┐
-                     │                   │
-                     │  KPI Generation   │
-                     │   & Collection    │
+                     │   Site Exporters  │
                      │                   │
                      └───────────────────┘
 ```
