@@ -9,3 +9,11 @@ datasources:
     isDefault: true
     version: 1
     editable: true
+
+  - name: Infinity
+    type: yesoreyeram-infinity-datasource
+    access: proxy
+    orgId: 1
+    isDefault: false
+    version: 1
+    editable: true

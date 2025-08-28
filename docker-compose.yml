@@ -1,42 +1,117 @@
-version: "3.9"
+version: "3.8"
 
 services:
-  monitor-service:
-    build: ./monitor-service
+  # =========================
+  # 5 SITE SIMULATORS
+  # =========================
+  site1:
+    build:
+      context: ./exporters/site1_simulator
+      dockerfile: Dockerfile
+    container_name: site1
     ports:
-      - "5001:5000"
-
-#  anomaly-service:
-#    build: ./anomaly-service
-#    ports:
-#      - "5002:5000"
-
-#  optimizer-service:
-#    build: ./optimizer-service
-#    ports:
-#      - "5003:5000"
-
-  prometheus:
-    image: prom/prometheus
+      - "5001:5001"
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/rules.yml:/etc/prometheus/rules.yml
+      - ./exporters/site1_simulator/site1_simulator.py:/app/site1_simulator.py
 
+  site2:
+    build:
+      context: ./exporters/site2_simulator
+      dockerfile: Dockerfile
+    container_name: site2
+    ports:
+      - "5002:5002"
+    volumes:
+      - ./exporters/site2_simulator/site2_simulator.py:/app/site2_simulator.py
+
+  site3:
+    build:
+      context: ./exporters/site3_simulator
+      dockerfile: Dockerfile
+    container_name: site3
+    ports:
+      - "5003:5003"
+    volumes:
+      - ./exporters/site3_simulator/site3_simulator.py:/app/site3_simulator.py
+
+  site4:
+    build:
+      context: ./exporters/site4_simulator
+      dockerfile: Dockerfile
+    container_name: site4
+    ports:
+      - "5004:5004"
+    volumes:
+      - ./exporters/site4_simulator/site4_simulator.py:/app/site4_simulator.py
+
+  site5:
+    build:
+      context: ./exporters/site5_simulator
+      dockerfile: Dockerfile
+    container_name: site5
+    ports:
+      - "5005:5005"
+    volumes:
+      - ./exporters/site5_simulator/site5_simulator.py:/app/site5_simulator.py
+
+  # =========================
+  # PROMETHEUS
+  # =========================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
     ports:
       - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
 
+  # =========================
+  # ALERTMANAGER
+  # =========================
   alertmanager:
-    image: prom/alertmanager
+    image: prom/alertmanager:latest
+    container_name: alertmanager
     ports:
       - "9093:9093"
     volumes:
-      - ./prometheus/alertmanager.yml:/etc/alertmanager/config.yml
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
 
+  # =========================
+  # GRAFANA
+  # =========================
   grafana:
-    image: grafana/grafana:11.1.0
-    volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning
+    image: grafana/grafana:latest
+    container_name: grafana
     ports:
       - "3000:3000"
+    environment:
+#      - GF_SECURITY_ADMIN_USER=admin
+#      - GF_SECURITY_ADMIN_PASSWORD=admin
+       - GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+#     - ./grafana/dashboards:/var/lib/grafana/dashboards
+
+  # =========================
+  # Report Sevice
+  # =========================
+  report_service:
+    build:
+      context: ./exporters/reports
+      dockerfile: Dockerfile
+    container_name: report_service
+    ports:
+      - "5006:5006"
+    volumes:
+      - ./exporters/reports:/app/reports
     depends_on:
-      - prometheus
+      - site1
+      - site2
+      - site3
+      - site4
+      - site5

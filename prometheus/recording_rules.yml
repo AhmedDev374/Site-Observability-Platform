@@ -1,0 +1,28 @@
+groups:
+  - name: site_aggregations
+    interval: 30s
+    rules:
+      - record: site:packets:sum
+        expr: sum by (site) (node_packets_sent_total)
+      - record: site:packets_recv:sum
+        expr: sum by (site) (node_packets_received_total)
+      - record: site:packet_loss:avg
+        expr: avg by (site) (node_packet_loss_percent)
+      - record: site:latency:avg
+        expr: avg by (site) (node_latency_ms)
+      - record: site:jitter:avg
+        expr: avg by (site) (node_jitter_ms)
+      - record: site:throughput:sum
+        expr: sum by (site) (node_throughput_mbps)
+      - record: site:availability:avg
+        expr: avg by (site) (node_availability_percent)
+      - record: site:sessions:sum
+        expr: sum by (site) (node_sessions_total)
+      - record: site:error_rate:avg
+        expr: avg by (site) (node_error_rate_percent)
+      - record: site:cpu:avg
+        expr: avg by (site) (node_cpu_usage_percent)
+      - record: site:memory:avg
+        expr: avg by (site) (node_memory_usage_percent)
+      - record: site:bandwidth_utilization:avg
+        expr: avg by (site) (node_bandwidth_utilization_percent)

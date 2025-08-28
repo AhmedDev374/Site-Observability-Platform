@@ -1,20 +1,104 @@
 groups:
-  - name: MN-Alerts
-    rules:
-      - alert: HighLatency
-        expr: latency_ms > 150
-        for: 10s
-        labels:
-          severity: critical
-        annotations:
-          summary: "High Latency Detected"
-          description: "Latency is above 150ms in Monitor Service"
+- name: site-alerts
+  interval: 30s    # check every 30 seconds
+  rules:
 
-      - alert: HighPacketLoss
-        expr: packet_loss_percent > 3
-        for: 10s
-        labels:
-          severity: critical
-        annotations:
-          summary: "High Packet Loss"
-          description: "Packet loss exceeds 3% in Monitor Service"
+  # 🚨 Packet Loss Alert
+  - alert: HighPacketLoss
+    expr: site_packet_loss_percent > 5
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High Packet Loss on {{ $labels.site }}"
+      description: "Packet loss is {{ $value }}% on site {{ $labels.site }}"
+
+  # 🚨 Latency Alert
+  - alert: HighLatency
+    expr: site_latency_ms > 200
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High Latency on {{ $labels.site }}"
+      description: "Latency is {{ $value }} ms on site {{ $labels.site }}"
+
+  # 🚨 Jitter Alert
+  - alert: HighJitter
+    expr: site_jitter_ms > 50
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High Jitter on {{ $labels.site }}"
+      description: "Jitter is {{ $value }} ms on site {{ $labels.site }}"
+
+  # 🚨 Throughput Alert
+  - alert: LowThroughput
+    expr: site_throughput_mbps < 10
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Low Throughput on {{ $labels.site }}"
+      description: "Throughput dropped to {{ $value }} Mbps"
+
+  # 🚨 Availability Alert
+  - alert: LowAvailability
+    expr: site_availability_percent < 99
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Low Availability on {{ $labels.site }}"
+      description: "Availability is {{ $value }}%"
+
+  # 🚨 Requests Alert
+  - alert: TooManyRequests
+    expr: site_requests_total > 1000
+    for: 1m
+    labels:
+      severity: info
+    annotations:
+      summary: "High Requests on {{ $labels.site }}"
+      description: "Requests are {{ $value }} on {{ $labels.site }}"
+
+  # 🚨 Error Rate Alert
+  - alert: HighErrorRate
+    expr: site_error_rate_percent > 2
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High Error Rate on {{ $labels.site }}"
+      description: "Error rate is {{ $value }}%"
+
+  # 🚨 CPU Alert
+  - alert: HighCPU
+    expr: site_cpu_usage_percent > 80
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High CPU Usage on {{ $labels.site }}"
+      description: "CPU usage is {{ $value }}%"
+
+  # 🚨 Memory Alert
+  - alert: HighMemory
+    expr: site_memory_usage_percent > 80
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High Memory Usage on {{ $labels.site }}"
+      description: "Memory usage is {{ $value }}%"
+
+  # 🚨 Bandwidth Alert
+  - alert: HighBandwidthUtilization
+    expr: site_bandwidth_utilization_percent > 90
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High Bandwidth Utilization on {{ $labels.site }}"
+      description: "Bandwidth utilization is {{ $value }}%"
