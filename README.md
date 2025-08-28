@@ -50,28 +50,35 @@ This platform helps track site uptime, performance, and service reliability with
 ## Architecture
 
 ```plaintext
-┌─────────────────┐     ┌─────────────┐     ┌─────────────────┐
-│                 │     │             │     │                 │
-│   Grafana UI    ◄─────┤ Prometheus  ├─────► Alertmanager    │
-│                 │     │             │     │                 │
-└─────────────────┘     └──────┬──────┘     └─────────────────┘
-                               │
-                     ┌─────────▼─────────┐
-                     │                   │
-                     │   Site Exporters  │
-                     │                   │
-                     └───────────────────┘
+┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
+│   Site 1    │   │   Site 2    │   │   Site 3    │   │   Site 4    │   │   Site 5    │
+│  Exporter   │   │  Exporter   │   │  Exporter   │   │  Exporter   │   │  Exporter   │
+└──────┬──────┘   └──────┬──────┘   └──────┬──────┘   └──────┬──────┘   └──────┬──────┘
+       │                 │                 │                 │                 │
+       └─────────────────┴─────────────────┴─────────────────┴─────────────────┘
+                                      │
+                              ┌───────▼────────┐
+                              │                │
+                              │   Prometheus   │
+                              │ (Collector/DB) │
+                              └───────┬────────┘
+                        ┌─────────────┴─────────────┐
+                        │                           │
+            ┌───────────▼───────────┐     ┌─────────▼─────────┐
+            │       Grafana          │     │   Alertmanager    │
+            │   (Visualization)      │     │     (Alerts)      │
+            └────────────────────────┘     └───────────────────┘
 ```
-All services are containerized and orchestrated via Docker Compose for easy deployment and management.
+All services run in containers managed by Docker Compose for easy deployment.
 
 ---
 ## Feature
 
 Ensure the following are installed on your system:
-  - Real-time packet loss detection and monitoring
-  - Network latency tracking and visualization
-  - Pre-configured Grafana dashboards for immediate insights
-  - Containerized deployment for easy setup and scalability
+  - Real-time monitoring of site services
+  - Pre-configured Grafana dashboards for service visibility
+  - Custom alerts for critical thresholds
+  - Containerized setup for easy deployment
 
 ---
 
@@ -95,8 +102,8 @@ docker compose version
 
 1. **Clone the repository**:
 ```plaintext
-git clone https://github.com/AhmedDev374/PrometheusFlow.git
-cd PrometheusFlow
+git clone https://github.com/AhmedDev374/Site-Observability-Platform.git
+cd Site-Observability-Platform
 ```
 
 2. **Build and start the stack:**:
@@ -110,18 +117,21 @@ Then open .env and set your environment variables (DB credentials, ports, etc.).
   - **Grafana** UI: ```http://localhost:3000```
   - **Prometheus**: ```http://localhost:9090```
   - **Alertmanager**: ```http://localhost:9093```
-  - **Metrics KPI**: ```http://localhost:5001/metrics```
-  - **PacketLoss On/Off**: ```http://localhost:5001/test/packetloss/on[off]```
-  - **Latency On/Off**: ```http://localhost:5001/test/latency/on[off]```
-
+  - **Site 1 Metrics**": ```http://localhost:5001/metrics```
+  - **Site 2 Metrics**": ```http://localhost:5002/metrics```
+  - **Site 3 Metrics**": ```http://localhost:5003/metrics```
+  - **Site 4 Metrics**": ```http://localhost:5004/metrics```
+  - **Site 5 Metrics**": ```http://localhost:5005/metrics```
+  - **Make A report of all Site**: ```http://localhost:5006/report/30```
+      > Will Create A CSV file in: ```/export/report```
 ---
 
 ## Usage
 **Monitoring Network Performance**
 
 1. Access the Grafana dashboard at http://localhost:3000
-2. Navigate to the "Network Monitoring" dashboard
-3. View real-time metrics for packet loss, latency, and network performance
+2. Open the "Site Monitoring" dashboard
+3. View metrics like uptime, latency, and service status
 
 **Configuring Alerts**
 
@@ -132,19 +142,11 @@ Then open .env and set your environment variables (DB credentials, ports, etc.).
 ```plaintext
 docker compose exec prometheus kill -HUP 1
 ```
-**Adding Custom Metrics**
 
-1. Place custom exporters in the ```exporters/``` directory
-2. Update ```prometheus/prometheus.yml``` to add new scrape target
-3. Restart the Prometheus service:
-```plaintext
-docker compose restart prometheus
-```
 ---
 
 ## Configuration & Environment Variables
 
-**Environment Variables**
 Create a ```.env``` file to customize the deployment:
 
 ```plaintext
@@ -155,36 +157,32 @@ GF_USERS_ALLOW_SIGN_UP=false
 
 # Prometheus Configuration
 PROMETHEUS_RETENTION=15d
-PROMETHEUS_SCrape_INTERVAL=15s
+PROMETHEUS_SCRAPE_INTERVAL=15s
 
-# Alertmanager Configuration
+# Alertmanager Email
 ALERTMANAGER_SMTP_HOST=smtp.gmail.com
 ALERTMANAGER_SMTP_PORT=587
 ALERTMANAGER_SMTP_FROM=alerts@example.com
 ```
-**Port Configuration**
-
-Modify ```docker-compose.yml``` to change exposed ports if defaults are occupied.
 
 ---
 
 ## Project Structure
 ```plaintext
-PrometheusPacketSentinel/
-├── docker-compose.yml          # Main compose file
+Site-Observability-Platform/
+├── docker-compose.yml          # Main stack definition
 ├── prometheus/
-│   ├── prometheus.yml          # Main Prometheus configuration
+│   ├── prometheus.yml          # Prometheus config
 │   └── alert.rules.yml         # Alerting rules
 ├── alertmanager/
-│   └── alertmanager.yml        # Alertmanager configuration
+│   └── alertmanager.yml        # Alertmanager config
 ├── grafana/
 │   ├── provisioning/
-│   │   ├── dashboards/         # Pre-configured dashboards
-│   │   └── datasources/        # Data source configurations
-│   └── config.ini              # Grafana configuration
-├── exporters/
-│   └── custom-exporter/        # Custom metric exporters
-└── README.md                   # This documentation
+│   │   ├── dashboards/         # Grafana dashboards
+│   │   └── datasources/        # Data source configs
+│   └── config.ini              # Grafana settings
+├── exporters/                  # Custom service exporters
+└── README.md                   # Documentation
 ```
 ---
 
@@ -192,26 +190,17 @@ PrometheusPacketSentinel/
 
 **Common Issues**
   1. **Port conflicts:** Change exposed ports in ```docker-compose.yml```
-  2. **Permission issues:** Ensure Docker has proper permissions to create volumes
-  3. **Container failures:** Check logs with ```docker compose logs [service_name]```
-  4. Metrics not showing: Verify scrape configurations in ```prometheus/prometheus.yml```
+  2. **Metrics not showing:** Verify scrape configurations in ```prometheus/prometheus.yml```
+  3. **Container issues:** Check logs:
 
-**Logs Inspection**
 ```plaintext
-# View logs for all services
 docker compose logs
-
-# View logs for specific service
 docker compose logs prometheus
 docker compose logs grafana
 ```
-
-**Restart Services**
+Restart services if needed:
 ```plaintext
-# Restart specific service
 docker compose restart prometheus
-
-# Rebuild and restart all services
 docker compose up -d --build
 ```
 
