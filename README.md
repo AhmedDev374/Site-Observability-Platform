@@ -1,14 +1,23 @@
 1. **Prometheus Targets:**  
-![prometheus_targets](Images/grafanaa_packer_loss(high).PNG)
+![explanation_of_proj](Images/explanation_of_proj.PNG)
 
-2. **Prometheus Alert:**  
-![prometheus_alert](Images/prometheus_alert.PNG)
+2. **Prometheus Target:**  
+![promethus_target](Images/promethus_target.PNG)
 
 3. **Grafana DataSource:**  
-![grafana_datasource](images/grafana_data_source.PNG)  
+![grafanaa_datasource](Images/grafanaa_datasource.PNG)  
 
 4. **Grafana Dashboard:**  
-![grafana_dashboard](Images/grafanaa_packer_loss(high).PNG)
+![grafanaa_dashboard](Images/grafanaa_dashboard.PNG)
+
+5. **Report Service:**  
+![explanation_of_proj_2](Images/explanation_of_proj_2.PNG)  
+
+6. **Prometheus Alert Rules:**  
+![prometheus_alert](Images/prometheus_alert.PNG)
+
+6. **AlertManager Service:**  
+![AlertManager](Images/AlertManager.PNG)
 
 ---
 
